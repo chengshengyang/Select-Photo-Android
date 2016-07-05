@@ -8,4 +8,51 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="bigWhiteText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textwhite</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="bigBlackText" parent="@style/bigWhiteText">
+        <item name="android:textColor">@color/textblack</item>
+    </style>
+
+    <style name="middleWhiteText" parent="@style/bigWhiteText">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="middleBlackText" parent="@style/middleWhiteText">
+        <item name="android:textColor">@color/textblack</item>
+    </style>
+
+    <style name="smallBlackText" parent="@style/middleBlackText">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="smallWhiteText" parent="@style/middleBlackText">
+        <item name="android:textColor">@color/textwhite</item>
+    </style>
+
+    <style name="HeaderImageView_M">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+    <style name="HeaderImageView_W" parent="@style/HeaderImageView_M">
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="CustomListView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:divider">@drawable/divider</item>
+        <item name="android:dividerHeight">1.5dp</item>
+        <item name="android:cacheColorHint">@color/transparent</item>
+        <item name="android:listSelector">@color/transparent</item>
+    </style>
+
 </resources>
