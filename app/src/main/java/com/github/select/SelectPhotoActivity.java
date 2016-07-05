@@ -154,8 +154,10 @@ public class SelectPhotoActivity extends AppCompatActivity
 				mEditPhotoFragment = (EditPhotoFragment) mFragmentManager.findFragmentByTag(Constants.TAG_FRAGMENT_PAGER);
 				String uri = albumInfo.getPhotoList().get(position).getImageURI();
 				if (mEditPhotoFragment == null) {
-					mEditPhotoFragment = new EditPhotoFragment(uri);
-
+					mEditPhotoFragment = new EditPhotoFragment();
+					Bundle bundle = new Bundle();
+					bundle.putString("image-uri", uri);
+					mEditPhotoFragment.setArguments(bundle);
 					transaction.add(R.id.selectphoto_content, mEditPhotoFragment, Constants.TAG_FRAGMENT_EDIT);
 					transaction.addToBackStack(null);
 				} else {

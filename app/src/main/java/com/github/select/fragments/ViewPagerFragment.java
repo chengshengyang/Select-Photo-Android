@@ -41,117 +41,126 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * 展示图片大图的Fragment
- * @author chengsy
  *
+ * @author chengsy
  */
 public class ViewPagerFragment extends BaseFragment implements OnPageChangeListener {
 
-	private AlbumInfo mAlbumInfo;
-	private ViewPagerAdapter mAdapter;
-	private ViewPagerFixed mViewPager;
-	
-	private ImageButton mSendBtn;
-	private ActionBar mActionBar;
-	private ImageView mActionBarSelectIv;
-	private View mMenuItemView;
-	
-	@Deprecated
-	private CheckBox mOriginalCheckBox;
-	
-	private CustomImageView mCountView;
-	private FrameLayout mSendFrameLayout;
-	private SelectPhotoActivity mActivity;
-	private Context mContext;
-	
-	private int mCurPosition = 0;
-	private String mToastFormat;
-	private String mCheckBoxFormat;
-	private int mMaxCount = Constants.MAX_SELECT_COUNT;
-	private TextView mSendText;
-	
-	Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 0:
-				Toast.makeText(getActivity().getApplicationContext(), String.format(mToastFormat, mMaxCount), Toast.LENGTH_SHORT).show();
-				break;
+    @BindView(R.id.view_pager)
+    ViewPagerFixed mViewPager;
 
-			default:
-				break;
-			}
-		}
-	};
-	
-	public void setInfo(AlbumInfo info, int position) {
-		this.mAlbumInfo = info;
-		this.mCurPosition = position;
-	}
-	
-	public int getSelectedCount() {
-		int selectedCount = 0;
-		for (int i = 0; i < mAlbumInfo.getPhotoList().size(); i++) {
-			if (mAlbumInfo.getPhotoList().get(i).isSelected) {
-				selectedCount ++;
-			}
-		}
-		return selectedCount;
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		mFragment = inflater.inflate(R.layout.fragment_viewpager, container, false);
-		mActivity = (SelectPhotoActivity) getActivity();
-		mContext = getActivity().getApplicationContext();
-		initView();
-		return mFragment;
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		if (mActivity != null) {
-			mToastFormat = mActivity.getApplicationContext().getString(R.string.toast_max_count);
-			mCheckBoxFormat = mActivity.getApplicationContext().getString(R.string.checkbox_original_size);
-			mAdapter = new ViewPagerAdapter(mActivity, mAlbumInfo);
-			mViewPager.setAdapter(mAdapter);
-		}
-		initEvent();
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		onPageSelected(mCurPosition);
-	}
-	
-	@Override
-	public void initView() {
-		mViewPager = (ViewPagerFixed) mFragment.findViewById(R.id.view_pager);
-		mSendFrameLayout = (FrameLayout) mFragment.findViewById(R.id.send_image_framelayout);
-		mSendBtn = (ImageButton) mFragment.findViewById(R.id.send_image_btn2);
-		mSendText = (TextView) mFragment.findViewById(R.id.send_text);
-		mOriginalCheckBox = (CheckBox) mFragment.findViewById(R.id.original_image_checkbox);
-		
-		mActionBar = mActivity.getSupportActionBar();
-		mActionBar.setDisplayHomeAsUpEnabled(true);
-		
-		mMenuItemView = getIconMenuItem(Constants.TAG_MENU_SELECT, R.drawable.gou_normal, mOnClickListener);
-		
-		int count = getSelectedCount();
-		mCountView = new CustomImageView(getActivity().getApplicationContext());
-		mCountView.setCount(count);
-		LayoutParams params = new LayoutParams(60, LayoutParams.MATCH_PARENT);
-		mSendFrameLayout.addView(mCountView, params);
+    @BindView(R.id.original_image_checkbox)
+    CheckBox mOriginalCheckBox;
+
+    @BindView(R.id.send_image_btn2)
+    ImageButton mSendBtn;
+
+    @BindView(R.id.send_text)
+    TextView mSendText;
+
+    @BindView(R.id.send_image_framelayout)
+    FrameLayout mSendFrameLayout;
+
+    private AlbumInfo mAlbumInfo;
+    private ViewPagerAdapter mAdapter;
+
+    private ActionBar mActionBar;
+    private ImageView mActionBarSelectIv;
+    private View mMenuItemView;
+
+    private CustomImageView mCountView;
+    private SelectPhotoActivity mActivity;
+    private Context mContext;
+
+    private int mCurPosition = 0;
+    private String mToastFormat;
+    private String mCheckBoxFormat;
+    private int mMaxCount = Constants.MAX_SELECT_COUNT;
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            String.format(mToastFormat, mMaxCount), Toast.LENGTH_SHORT).show();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    };
+
+    public void setInfo(AlbumInfo info, int position) {
+        this.mAlbumInfo = info;
+        this.mCurPosition = position;
+    }
+
+    public int getSelectedCount() {
+        int selectedCount = 0;
+        for (int i = 0; i < mAlbumInfo.getPhotoList().size(); i++) {
+            if (mAlbumInfo.getPhotoList().get(i).isSelected) {
+                selectedCount++;
+            }
+        }
+        return selectedCount;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        mFragment = inflater.inflate(R.layout.fragment_viewpager, container, false);
+        mActivity = (SelectPhotoActivity) getActivity();
+        mContext = getActivity().getApplicationContext();
+        ButterKnife.bind(this, mFragment);
+        initView();
+        return mFragment;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mActivity != null) {
+            mToastFormat = mActivity.getApplicationContext().getString(R.string.toast_max_count);
+            mCheckBoxFormat = mActivity.getApplicationContext().getString(R.string.checkbox_original_size);
+            mAdapter = new ViewPagerAdapter(mActivity, mAlbumInfo);
+            mViewPager.setAdapter(mAdapter);
+        }
+        initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onPageSelected(mCurPosition);
+    }
+
+    @Override
+    public void initView() {
+        mActionBar = mActivity.getSupportActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+
+        mMenuItemView = getIconMenuItem(Constants.TAG_MENU_SELECT, R.drawable.gou_normal, mOnClickListener);
+
+        int count = getSelectedCount();
+        mCountView = new CustomImageView(getActivity().getApplicationContext());
+        mCountView.setCount(count);
+        LayoutParams params = new LayoutParams(60, LayoutParams.MATCH_PARENT);
+        mSendFrameLayout.addView(mCountView, params);
+
+
 //		if (count == 0) {
 //			mSendBtn.setEnabled(false);
 //			mSendBtn.setTextColor(Color.GRAY);
@@ -159,38 +168,38 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
 //			mSendBtn.setEnabled(true);
 //			mSendBtn.setTextColor(Color.WHITE);
 //		}
-		mSendBtn.setEnabled(true);
-		mSendText.setTextColor(Color.WHITE);
-	}
-	
-	OnClickListener mOnClickListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			int tag = (Integer) v.getTag();
-			switch (tag) {
-			case Constants.TAG_MENU_SELECT:
-				List<PhotoInfo> photoList = mAlbumInfo.getPhotoList();
-				PhotoInfo pInfo = photoList.get(mCurPosition);
-				int selectedCount = getSelectedCount();
-				if (selectedCount < mMaxCount) {
-					pInfo.isSelected = !pInfo.isSelected;
+        mSendBtn.setEnabled(true);
+        mSendText.setTextColor(Color.WHITE);
+    }
 
-					if (pInfo.isSelected) {
-						mActionBarSelectIv.setImageResource(R.drawable.gou_selected);
-						selectedCount ++;
-					} else {
-						mActionBarSelectIv.setImageResource(R.drawable.gou_normal);
-						selectedCount --;
-					}
-				} else if (selectedCount >= mMaxCount) {
-					if (pInfo.isSelected == true) {
-						pInfo.isSelected = !pInfo.isSelected;
-						mActionBarSelectIv.setImageResource(R.drawable.gou_normal);
-						selectedCount --;
-					} else {
-						Message message = Message.obtain(mHandler, 0);
-						message.sendToTarget();
-						
+    OnClickListener mOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int tag = (Integer) v.getTag();
+            switch (tag) {
+                case Constants.TAG_MENU_SELECT:
+                    List<PhotoInfo> photoList = mAlbumInfo.getPhotoList();
+                    PhotoInfo pInfo = photoList.get(mCurPosition);
+                    int selectedCount = getSelectedCount();
+                    if (selectedCount < mMaxCount) {
+                        pInfo.isSelected = !pInfo.isSelected;
+
+                        if (pInfo.isSelected) {
+                            mActionBarSelectIv.setImageResource(R.drawable.gou_selected);
+                            selectedCount++;
+                        } else {
+                            mActionBarSelectIv.setImageResource(R.drawable.gou_normal);
+                            selectedCount--;
+                        }
+                    } else if (selectedCount >= mMaxCount) {
+                        if (pInfo.isSelected == true) {
+                            pInfo.isSelected = !pInfo.isSelected;
+                            mActionBarSelectIv.setImageResource(R.drawable.gou_normal);
+                            selectedCount--;
+                        } else {
+                            Message message = Message.obtain(mHandler, 0);
+                            message.sendToTarget();
+
 //						for (int i = 0; i < photoList.size(); i++) {
 //							if (photoList.get(i).isSelected) {
 //								photoList.get(i).isSelected = false;
@@ -200,133 +209,135 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
 //						
 //						pInfo.isSelected = !pInfo.isSelected;
 //						mActionBarSelectIv.setImageResource(R.drawable.gou_selected);
-					}
-				}
-				invalidate();
-			
-				break;
+                        }
+                    }
+                    invalidate();
 
-			default:
-				break;
-			}
-		}
-	};
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		MenuItem recordItem = menu.add(getString(R.string.action_menu_select));
-		setActionViewAlways(recordItem, mMenuItemView);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-	
-	/**
-	 * 设置图片MenuItem
-	 * @param tag 点击事件标记
-	 * @param resId 显示图片资源id
-	 * @param listener 点击事件
-	 * @return
-	 */
-	public View getIconMenuItem(int tag, int resId, OnClickListener listener) {
-		View view = View.inflate(mContext, R.layout.actionbar_menu_item_view, null);
-		mActionBarSelectIv = (ImageView) view.findViewById(R.id.icon);
-		mActionBarSelectIv.setImageResource(resId);
-		setViewBackground(view, tag, listener);
-		return view;
-	}
+                    break;
 
-	/**
-	 * 设置MenuItem一直显示
-	 * @param item
-	 * @param view
-	 */
-	public void setActionViewAlways(MenuItem item, View view){
-		MenuItemCompat.setActionView(item, view);
-		MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-	}
-	
-	public void setViewBackground(View view, int tag, OnClickListener listener) {
-		view.setBackgroundResource(R.drawable.actionbar_menu_selector);
-		view.setMinimumWidth(SelectPhotoActivity.iAcionWidth);
-		view.setMinimumHeight(SelectPhotoActivity.iActionHeight);
-		view.setTag(tag);
-		view.setOnClickListener(listener);
-	}
+                default:
+                    break;
+            }
+        }
+    };
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			FragmentManager fm = getActivity().getSupportFragmentManager();
-			ViewPagerFragment fragment = (ViewPagerFragment) fm.findFragmentByTag(getTag());
-			if (fragment == null) return false;
-			((SelectPhotoActivity) getActivity()).removeFragment(fragment);
-			break;
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MenuItem recordItem = menu.add(getString(R.string.action_menu_select));
+        setActionViewAlways(recordItem, mMenuItemView);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-		default:
-			break;
-		}
-		
-		return super.onOptionsItemSelected(item);
-	}
-	
-	@Override
-	public void initEvent() {
-		mViewPager.setOnPageChangeListener(this);
-		mViewPager.setCurrentItem(mCurPosition);
-		mActionBar.setTitle(mCurPosition + 1 + "/" + mAdapter.getCount());
-		
-		mOriginalCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				PhotoInfo info = mAlbumInfo.getPhotoList().get(mCurPosition);
-				if (isChecked) {
-					info.isOriginal = true;
-					String fileSize = getFileSize(info.getImagePath());
-					mOriginalCheckBox.setText(String.format(mCheckBoxFormat, fileSize));
-					mOriginalCheckBox.setTextColor(Color.WHITE);
-				} else {
-					info.isOriginal = false;
-					mOriginalCheckBox.setText(R.string.checkbox_original);
-					mOriginalCheckBox.setTextColor(Color.GRAY);
-				}
-			}
-		});
-		
-		mOriginalCheckBox.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				int count = getSelectedCount();
-				PhotoInfo info = mAlbumInfo.getPhotoList().get(mCurPosition);
-				if (count < mMaxCount && mOriginalCheckBox.isChecked()) {
-					info.isSelected = true;
-					mActionBarSelectIv.setImageResource(R.drawable.gou_selected);
-				} else if (count >= mMaxCount && !info.isSelected && mOriginalCheckBox.isChecked()) {
-					Message message = Message.obtain(mHandler, 0);
-					message.sendToTarget();
-				}
-				invalidate();
-			}
-		});
-		
-		mSendBtn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.putStringArrayListExtra(Constants.EXTRA_SELECTED_FILE_PATH, (ArrayList<String>) getSelectedPhoto());
-				((SelectPhotoActivity) getActivity()).setResult(Activity.RESULT_OK, intent);
-				((SelectPhotoActivity) getActivity()).finish();
-			}
-		});
-	}
-	
-	@Override
-	public void invalidate() {
-		mAdapter.notifyDataSetChanged();
-		int count = getSelectedCount();
-		mCountView.setCount(count);
+    /**
+     * 设置图片MenuItem
+     *
+     * @param tag      点击事件标记
+     * @param resId    显示图片资源id
+     * @param listener 点击事件
+     * @return
+     */
+    public View getIconMenuItem(int tag, int resId, OnClickListener listener) {
+        View view = View.inflate(mContext, R.layout.actionbar_menu_item_view, null);
+        mActionBarSelectIv = (ImageView) view.findViewById(R.id.icon);
+        mActionBarSelectIv.setImageResource(resId);
+        setViewBackground(view, tag, listener);
+        return view;
+    }
+
+    /**
+     * 设置MenuItem一直显示
+     *
+     * @param item
+     * @param view
+     */
+    public void setActionViewAlways(MenuItem item, View view) {
+        MenuItemCompat.setActionView(item, view);
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+    }
+
+    public void setViewBackground(View view, int tag, OnClickListener listener) {
+        view.setBackgroundResource(R.drawable.actionbar_menu_selector);
+        view.setMinimumWidth(SelectPhotoActivity.iAcionWidth);
+        view.setMinimumHeight(SelectPhotoActivity.iActionHeight);
+        view.setTag(tag);
+        view.setOnClickListener(listener);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                ViewPagerFragment fragment = (ViewPagerFragment) fm.findFragmentByTag(getTag());
+                if (fragment == null) return false;
+                ((SelectPhotoActivity) getActivity()).removeFragment(fragment);
+                break;
+
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void initEvent() {
+        mViewPager.setOnPageChangeListener(this);
+        mViewPager.setCurrentItem(mCurPosition);
+        mActionBar.setTitle(mCurPosition + 1 + "/" + mAdapter.getCount());
+
+        mOriginalCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PhotoInfo info = mAlbumInfo.getPhotoList().get(mCurPosition);
+                if (isChecked) {
+                    info.isOriginal = true;
+                    String fileSize = getFileSize(info.getImagePath());
+                    mOriginalCheckBox.setText(String.format(mCheckBoxFormat, fileSize));
+                    mOriginalCheckBox.setTextColor(Color.WHITE);
+                } else {
+                    info.isOriginal = false;
+                    mOriginalCheckBox.setText(R.string.checkbox_original);
+                    mOriginalCheckBox.setTextColor(Color.GRAY);
+                }
+            }
+        });
+
+        mOriginalCheckBox.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                int count = getSelectedCount();
+                PhotoInfo info = mAlbumInfo.getPhotoList().get(mCurPosition);
+                if (count < mMaxCount && mOriginalCheckBox.isChecked()) {
+                    info.isSelected = true;
+                    mActionBarSelectIv.setImageResource(R.drawable.gou_selected);
+                } else if (count >= mMaxCount && !info.isSelected && mOriginalCheckBox.isChecked()) {
+                    Message message = Message.obtain(mHandler, 0);
+                    message.sendToTarget();
+                }
+                invalidate();
+            }
+        });
+
+        mSendBtn.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra(Constants.EXTRA_SELECTED_FILE_PATH, (ArrayList<String>) getSelectedPhoto());
+                ((SelectPhotoActivity) getActivity()).setResult(Activity.RESULT_OK, intent);
+                ((SelectPhotoActivity) getActivity()).finish();
+            }
+        });
+    }
+
+    @Override
+    public void invalidate() {
+        mAdapter.notifyDataSetChanged();
+        int count = getSelectedCount();
+        mCountView.setCount(count);
 //		if (count == 0) {
 //			mSendBtn.setEnabled(false);
 //			mSendBtn.setTextColor(Color.GRAY);
@@ -334,101 +345,101 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
 //			mSendBtn.setEnabled(true);
 //			mSendBtn.setTextColor(Color.WHITE);
 //		}
-	}
+    }
 
-	@Override
-	public void onPageScrollStateChanged(int arg0) {
-		
-	}
+    @Override
+    public void onPageScrollStateChanged(int arg0) {
 
-	@Override
-	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-		
-	}
+    }
 
-	@Override
-	public void onPageSelected(int position) {
-		mCurPosition = position;
-		mActionBar.setTitle(mCurPosition + 1 + "/" + mAdapter.getCount());
-		PhotoInfo pInfo = mAlbumInfo.getPhotoList().get(position);
-		
-		if (pInfo.isSelected) {
-			mActionBarSelectIv.setImageResource(R.drawable.gou_selected);
-		} else {
-			mActionBarSelectIv.setImageResource(R.drawable.gou_normal);
-		}
-		
-		if (mOriginalCheckBox.isChecked() == pInfo.isOriginal) {
-			if (mOriginalCheckBox.isChecked()) {
-				String fileSize = getFileSize(pInfo.getImagePath());
-				mOriginalCheckBox.setText(String.format(mCheckBoxFormat, fileSize));
-				mOriginalCheckBox.setTextColor(Color.WHITE);
-			} else {
-				mOriginalCheckBox.setText(R.string.checkbox_original);
-				mOriginalCheckBox.setTextColor(Color.GRAY);
-			}
-		} else {
-			mOriginalCheckBox.setChecked(pInfo.isOriginal);
-		}
-	}
-	
-	/**
-	 * 返回选取的单个图片
-	 */
-	public String getSelectedPhotoPath() {
-		List<PhotoInfo> pInfos = mAlbumInfo.getPhotoList();
-		for (int i = 0; i < pInfos.size(); i++) {
-			PhotoInfo pInfo = pInfos.get(i);
-			if (pInfo.isSelected) {
-				return pInfo.getImageURI();
-			}
-		}
-		return pInfos.get(mCurPosition).getImageURI();
-	}
-	
-	/**
-	 * 返回选取的多个图片
-	 */
-	public List<String> getSelectedPhoto() {
-		ArrayList<String> selectedList = new ArrayList<String>();
-		List<PhotoInfo> pInfos = mAlbumInfo.getPhotoList();
-		for (int i = 0; i < pInfos.size(); i++) {
-			PhotoInfo pInfo = pInfos.get(i);
-			if (pInfo.isSelected) {
-				selectedList.add(pInfo.getImageURI());
-			}
-		}
-		if (selectedList.size() == 0) {
-			selectedList.add(pInfos.get(mCurPosition).getImageURI());
-		}
-		return selectedList;
-	}
-	
-	public String getFileSize(String filePath) {
-		File file = new File(filePath);
-		return FormatFileSize(file.length());
-	}
-	
-	//get file formated size, example: xxxB,xxxKB,xxxMB,xxxGB
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        mCurPosition = position;
+        mActionBar.setTitle(mCurPosition + 1 + "/" + mAdapter.getCount());
+        PhotoInfo pInfo = mAlbumInfo.getPhotoList().get(position);
+
+        if (pInfo.isSelected) {
+            mActionBarSelectIv.setImageResource(R.drawable.gou_selected);
+        } else {
+            mActionBarSelectIv.setImageResource(R.drawable.gou_normal);
+        }
+
+        if (mOriginalCheckBox.isChecked() == pInfo.isOriginal) {
+            if (mOriginalCheckBox.isChecked()) {
+                String fileSize = getFileSize(pInfo.getImagePath());
+                mOriginalCheckBox.setText(String.format(mCheckBoxFormat, fileSize));
+                mOriginalCheckBox.setTextColor(Color.WHITE);
+            } else {
+                mOriginalCheckBox.setText(R.string.checkbox_original);
+                mOriginalCheckBox.setTextColor(Color.GRAY);
+            }
+        } else {
+            mOriginalCheckBox.setChecked(pInfo.isOriginal);
+        }
+    }
+
+    /**
+     * 返回选取的单个图片
+     */
+    public String getSelectedPhotoPath() {
+        List<PhotoInfo> pInfos = mAlbumInfo.getPhotoList();
+        for (int i = 0; i < pInfos.size(); i++) {
+            PhotoInfo pInfo = pInfos.get(i);
+            if (pInfo.isSelected) {
+                return pInfo.getImageURI();
+            }
+        }
+        return pInfos.get(mCurPosition).getImageURI();
+    }
+
+    /**
+     * 返回选取的多个图片
+     */
+    public List<String> getSelectedPhoto() {
+        ArrayList<String> selectedList = new ArrayList<String>();
+        List<PhotoInfo> pInfos = mAlbumInfo.getPhotoList();
+        for (int i = 0; i < pInfos.size(); i++) {
+            PhotoInfo pInfo = pInfos.get(i);
+            if (pInfo.isSelected) {
+                selectedList.add(pInfo.getImageURI());
+            }
+        }
+        if (selectedList.size() == 0) {
+            selectedList.add(pInfos.get(mCurPosition).getImageURI());
+        }
+        return selectedList;
+    }
+
+    public String getFileSize(String filePath) {
+        File file = new File(filePath);
+        return FormatFileSize(file.length());
+    }
+
+    //get file formated size, example: xxxB,xxxKB,xxxMB,xxxGB
     public String FormatFileSize(long filesize) {
-		String sizeStr = null;
-		float sizeFloat = 0;
-		if (filesize < 1024) {
-			sizeStr = Long.toString(filesize);
-			sizeStr += "B";
-		} else if (filesize < (1 << 20)) {
-			sizeFloat = (float) filesize / (1 << 10);
-			sizeFloat = (float) (Math.round(sizeFloat * 100)) / 100;
-			sizeStr = Float.toString(sizeFloat) + "KB";
-		} else if (filesize < (1 << 30)) {
-			sizeFloat = (float) filesize / (1 << 20);
-			sizeFloat = (float) (Math.round(sizeFloat * 100)) / 100;
-			sizeStr = Float.toString(sizeFloat) + "MB";
-		} else {
-			sizeFloat = (float) filesize / (1 << 30);
-			sizeFloat = (float) (Math.round(sizeFloat * 100)) / 100;
-			sizeStr = Float.toString(sizeFloat) + "GB";
-		}
-		return sizeStr;
-	}
+        String sizeStr = null;
+        float sizeFloat = 0;
+        if (filesize < 1024) {
+            sizeStr = Long.toString(filesize);
+            sizeStr += "B";
+        } else if (filesize < (1 << 20)) {
+            sizeFloat = (float) filesize / (1 << 10);
+            sizeFloat = (float) (Math.round(sizeFloat * 100)) / 100;
+            sizeStr = Float.toString(sizeFloat) + "KB";
+        } else if (filesize < (1 << 30)) {
+            sizeFloat = (float) filesize / (1 << 20);
+            sizeFloat = (float) (Math.round(sizeFloat * 100)) / 100;
+            sizeStr = Float.toString(sizeFloat) + "MB";
+        } else {
+            sizeFloat = (float) filesize / (1 << 30);
+            sizeFloat = (float) (Math.round(sizeFloat * 100)) / 100;
+            sizeStr = Float.toString(sizeFloat) + "GB";
+        }
+        return sizeStr;
+    }
 }

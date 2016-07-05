@@ -61,12 +61,12 @@ public class ViewPagerAdapter extends PagerAdapter {
 	public Object instantiateItem(ViewGroup container, int position) {
 		View imageLayout = LayoutInflater.from(mContext).inflate(R.layout.item_image_pager, null);
 		assert imageLayout != null;
-		
+
+		final ProgressBar progressBar = (ProgressBar) imageLayout.findViewById(R.id.loading);
 		PhotoView photoView = (PhotoView) imageLayout.findViewById(R.id.photoview);
 //		photoView.setZoomable(false);
 //		photoView.setClickable(false);
-		final ProgressBar progressBar = (ProgressBar) imageLayout.findViewById(R.id.loading);
-		
+
 		PhotoInfo pInfo = mPhotoList.get(position);
 		String uri = pInfo.getImageURI();
 		
