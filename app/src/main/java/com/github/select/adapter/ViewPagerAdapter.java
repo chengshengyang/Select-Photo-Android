@@ -36,8 +36,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 	private List<PhotoInfo> mPhotoList;
 	private boolean showToolbar = false;
 	private ActionBar mActionBar;
-	private LinearLayout mBottomBar;
-	
+
 	
 	public ViewPagerAdapter(Context context, AlbumInfo info) {
 		this.mContext = context;
@@ -49,7 +48,6 @@ public class ViewPagerAdapter extends PagerAdapter {
 	
 	private void initView() {
 		mActionBar = ((SelectPhotoActivity) mActivity).getSupportActionBar();
-		mBottomBar = (LinearLayout) mActivity.findViewById(R.id.bottom_bar_linear);
 	}
 
 	@Override
@@ -146,11 +144,11 @@ public class ViewPagerAdapter extends PagerAdapter {
 
 	private void showToolBar() {
 		//mActionBar.show();
-		mBottomBar.setVisibility(View.VISIBLE);
+		//mBottomBar.setVisibility(View.VISIBLE);
 	}
-	
+
 	private void hideToolBar() {
 		//mActionBar.hide();
-		mBottomBar.setVisibility(View.GONE);
+		//mBottomBar.setVisibility(View.GONE);
 	}
 }

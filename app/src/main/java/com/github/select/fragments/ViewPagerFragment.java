@@ -3,7 +3,6 @@ package com.github.select.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,14 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.github.select.Constants;
@@ -34,7 +28,6 @@ import com.github.select.SelectPhotoActivity;
 import com.github.select.adapter.ViewPagerAdapter;
 import com.github.select.entity.AlbumInfo;
 import com.github.select.entity.PhotoInfo;
-import com.github.select.widget.CustomImageView;
 import com.github.select.widget.ViewPagerFixed;
 
 import java.io.File;
@@ -54,17 +47,8 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
     @BindView(R.id.view_pager)
     ViewPagerFixed mViewPager;
 
-    @BindView(R.id.original_image_checkbox)
-    CheckBox mOriginalCheckBox;
-
-    @BindView(R.id.send_image_btn2)
-    ImageButton mSendBtn;
-
-    @BindView(R.id.send_text)
-    TextView mSendText;
-
-    @BindView(R.id.send_image_framelayout)
-    FrameLayout mSendFrameLayout;
+    @BindView(R.id.send_image_btn1)
+    Button mSendBtn;
 
     private AlbumInfo mAlbumInfo;
     private ViewPagerAdapter mAdapter;
@@ -73,13 +57,11 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
     private ImageView mActionBarSelectIv;
     private View mMenuItemView;
 
-    private CustomImageView mCountView;
     private SelectPhotoActivity mActivity;
     private Context mContext;
 
     private int mCurPosition = 0;
     private String mToastFormat;
-    private String mCheckBoxFormat;
     private int mMaxCount = Constants.MAX_SELECT_COUNT;
 
     Handler mHandler = new Handler() {
@@ -119,8 +101,7 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFragment = inflater.inflate(R.layout.fragment_viewpager, container, false);
         mActivity = (SelectPhotoActivity) getActivity();
         mContext = getActivity().getApplicationContext();
@@ -134,7 +115,6 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
         super.onActivityCreated(savedInstanceState);
         if (mActivity != null) {
             mToastFormat = mActivity.getApplicationContext().getString(R.string.toast_max_count);
-            mCheckBoxFormat = mActivity.getApplicationContext().getString(R.string.checkbox_original_size);
             mAdapter = new ViewPagerAdapter(mActivity, mAlbumInfo);
             mViewPager.setAdapter(mAdapter);
         }
@@ -151,25 +131,9 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
     public void initView() {
         mActionBar = mActivity.getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
-
         mMenuItemView = getIconMenuItem(Constants.TAG_MENU_SELECT, R.drawable.gou_normal, mOnClickListener);
-
         int count = getSelectedCount();
-        mCountView = new CustomImageView(getActivity().getApplicationContext());
-        mCountView.setCount(count);
-        LayoutParams params = new LayoutParams(60, LayoutParams.MATCH_PARENT);
-        mSendFrameLayout.addView(mCountView, params);
-
-
-//		if (count == 0) {
-//			mSendBtn.setEnabled(false);
-//			mSendBtn.setTextColor(Color.GRAY);
-//		} else {
-//			mSendBtn.setEnabled(true);
-//			mSendBtn.setTextColor(Color.WHITE);
-//		}
-        mSendBtn.setEnabled(true);
-        mSendText.setTextColor(Color.WHITE);
+        mSendBtn.setText(getString(R.string.button_ok) + " (" + count + ")");
     }
 
     OnClickListener mOnClickListener = new OnClickListener() {
@@ -286,41 +250,6 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
         mViewPager.setCurrentItem(mCurPosition);
         mActionBar.setTitle(mCurPosition + 1 + "/" + mAdapter.getCount());
 
-        mOriginalCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PhotoInfo info = mAlbumInfo.getPhotoList().get(mCurPosition);
-                if (isChecked) {
-                    info.isOriginal = true;
-                    String fileSize = getFileSize(info.getImagePath());
-                    mOriginalCheckBox.setText(String.format(mCheckBoxFormat, fileSize));
-                    mOriginalCheckBox.setTextColor(Color.WHITE);
-                } else {
-                    info.isOriginal = false;
-                    mOriginalCheckBox.setText(R.string.checkbox_original);
-                    mOriginalCheckBox.setTextColor(Color.GRAY);
-                }
-            }
-        });
-
-        mOriginalCheckBox.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                int count = getSelectedCount();
-                PhotoInfo info = mAlbumInfo.getPhotoList().get(mCurPosition);
-                if (count < mMaxCount && mOriginalCheckBox.isChecked()) {
-                    info.isSelected = true;
-                    mActionBarSelectIv.setImageResource(R.drawable.gou_selected);
-                } else if (count >= mMaxCount && !info.isSelected && mOriginalCheckBox.isChecked()) {
-                    Message message = Message.obtain(mHandler, 0);
-                    message.sendToTarget();
-                }
-                invalidate();
-            }
-        });
-
         mSendBtn.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -337,7 +266,7 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
     public void invalidate() {
         mAdapter.notifyDataSetChanged();
         int count = getSelectedCount();
-        mCountView.setCount(count);
+        mSendBtn.setText(getString(R.string.button_ok) + " (" + count + ")");
 //		if (count == 0) {
 //			mSendBtn.setEnabled(false);
 //			mSendBtn.setTextColor(Color.GRAY);
@@ -367,19 +296,6 @@ public class ViewPagerFragment extends BaseFragment implements OnPageChangeListe
             mActionBarSelectIv.setImageResource(R.drawable.gou_selected);
         } else {
             mActionBarSelectIv.setImageResource(R.drawable.gou_normal);
-        }
-
-        if (mOriginalCheckBox.isChecked() == pInfo.isOriginal) {
-            if (mOriginalCheckBox.isChecked()) {
-                String fileSize = getFileSize(pInfo.getImagePath());
-                mOriginalCheckBox.setText(String.format(mCheckBoxFormat, fileSize));
-                mOriginalCheckBox.setTextColor(Color.WHITE);
-            } else {
-                mOriginalCheckBox.setText(R.string.checkbox_original);
-                mOriginalCheckBox.setTextColor(Color.GRAY);
-            }
-        } else {
-            mOriginalCheckBox.setChecked(pInfo.isOriginal);
         }
     }
 

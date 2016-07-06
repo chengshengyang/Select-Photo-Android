@@ -19,7 +19,7 @@ public class Constants {
 	public static final String TAG_FRAGMENT_EDIT			= "VIEW_EDIT";
 	
 	//others
-	public static int MAX_SELECT_COUNT 						= 1;
+	public static int MAX_SELECT_COUNT 						= 9;
 	
 	//actionbar menu
 	public static final int TAG_MENU_SELECT 				= 10;
