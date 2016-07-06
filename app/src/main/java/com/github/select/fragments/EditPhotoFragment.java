@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.github.select.R;
 import com.github.select.SelectPhotoActivity;
-import com.github.select.ui.ClipImageView;
+import com.github.select.widget.ClipImageView;
 import com.github.select.util.UniversalImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 public class EditPhotoFragment extends BaseFragment {
     public static final int TAG_EDIT_PHOTO = 1000;
     @BindView(R.id.edit_photo_src)
-    com.github.select.ui.ClipImageView mClipImageView;
+    ClipImageView mClipImageView;
 
     @BindView(R.id.loading)
     ProgressBar mProgressBar;

@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <com.github.select.ui.ViewPagerFixed
+    <com.github.select.widget.ViewPagerFixed
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -21,7 +21,7 @@ import com.github.select.Constants;
 import com.github.select.R;
 import com.github.select.entity.AlbumInfo;
 import com.github.select.entity.PhotoInfo;
-import com.github.select.ui.RotateImageViewAware;
+import com.github.select.widget.RotateImageViewAware;
 import com.github.select.util.BitmapCache;
 import com.github.select.util.BitmapCache.ImageCallback;
 import com.github.select.util.ThumbnailsUtil;

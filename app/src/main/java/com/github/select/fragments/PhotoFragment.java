@@ -30,7 +30,7 @@ import com.github.select.adapter.PhotoAdapter;
 import com.github.select.adapter.PhotoAdapter.onSelectedPhotoChangeListener;
 import com.github.select.entity.AlbumInfo;
 import com.github.select.entity.PhotoInfo;
-import com.github.select.ui.CustomImageView;
+import com.github.select.widget.CustomImageView;
 
 import java.util.ArrayList;
 import java.util.List;

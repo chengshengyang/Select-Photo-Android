@@ -97,9 +97,8 @@ public class UniversalImageLoader {
 	/**
 	 * 加载网络图片
 	 * 
-	 * @param photoView
-	 * @param filePath
-	 * @param listener
+	 * @param uri
+	 * @param imageView
 	 */
 	public static void displayNetImage(String uri, ImageAware imageView) {
 		DisplayImageOptions options = new DisplayImageOptions.Builder()

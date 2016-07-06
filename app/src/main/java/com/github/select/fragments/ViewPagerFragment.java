@@ -34,8 +34,8 @@ import com.github.select.SelectPhotoActivity;
 import com.github.select.adapter.ViewPagerAdapter;
 import com.github.select.entity.AlbumInfo;
 import com.github.select.entity.PhotoInfo;
-import com.github.select.ui.CustomImageView;
-import com.github.select.ui.ViewPagerFixed;
+import com.github.select.widget.CustomImageView;
+import com.github.select.widget.ViewPagerFixed;
 
 import java.io.File;
 import java.util.ArrayList;
